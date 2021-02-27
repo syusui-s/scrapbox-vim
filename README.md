@@ -17,8 +17,8 @@ runtimepathに加えるか、各種プラグイン管理ツールを使用して
 
 Vim-plug:
 
-```vim
-Plug 'syusui-s/scrapbox-vim'
+```
+Plug 'syusui-s/scrapbox-vim', { 'for': 'scrapbox' }
 ```
 
 dein.vim:
@@ -32,23 +32,59 @@ dein.vim(TOML):
 ```toml
 [[plugins]]
 repo = 'syusui-s/scrapbox-vim'
+on_ft = 'scrapbox'
 ```
 
-## context_filetype設定例
+## オススメ設定
+### インデント表示
+インデント可視化プラグインを導入しておくと、リストが見やすくなります。
+
+* [Yggdroot/indentLine](https://github.com/Yggdroot/indentLine)
+* [nathanaelkane/vim-indent-guides](https://github.com/nathanaelkane/vim-indent-guides)
+
+### context_filetype 設定例
 [Shougo/context_filetype.vim: Context filetype library for Vim script](https://github.com/Shougo/context_filetype.vim)の設定例です。
 
-※ 作者は [osyo-manga/vim-precious: Vim constext filetype](https://github.com/osyo-manga/vim-precious)と組み合わせて使っています
+※ 私は [osyo-manga/vim-precious: Vim constext filetype](https://github.com/osyo-manga/vim-precious)と組み合わせて使っています
+
+拡張子がそのままfiletypeとして使われる設定になっています。
 
 ```vim
 let g:context_filetype#filetypes = {
   \   'scrapbox': [
   \     {
-  \       'start' : '^\(\s*)code:[^.]\{1,}\%(\.\(\h\w*\)\)\{0,}',
-  \       'end' : '^\(\1\s\)\@<!',
+  \       'start' : '^\(\s*\)code:[^.]*\.\(\w\+\)',
+  \       'end' : '^\1\(\s\)\@!',
   \       'filetype' : '\2',
   \     }
   \   ]
   \ }
+```
+
+拡張子とファイルタイプのマップを用意して動的に生成することもできます。
+
+```vim
+let g:context_filetype#filetypes = {}
+
+let filetype_map = {
+  \ 'js': 'javascript',
+  \ 'rs': 'rust',
+  \ 'fs': 'fsharp',
+  \ 'fsx': 'fsharp',
+  \}
+
+let scrapbox = []
+for ext in keys(filetype_map)
+  let def = {
+    \   'start' : '^\(\s*\)code:[^.]*\.' . ext,
+    \   'end' : '^\1\(\s\)\@!',
+    \   'filetype' : filetype_map[ext],
+    \ }
+  call add(scrapbox, def)
+endfor
+
+let g:context_filetype#filetypes = {}
+let g:context_filetype#filetypes['scrapbox'] = scrapbox
 ```
 
 ## ライセンス

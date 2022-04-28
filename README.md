@@ -1,8 +1,10 @@
 scrapbox-vim
 ======
 
+![image](https://user-images.githubusercontent.com/1228033/165723282-124f4294-4f50-4eee-8bde-3edee215a7f5.png)
+
 ## 機能
-* ファイルタイプ検知 (`.scrapbox`, `.scrap`)
+* ファイルタイプ検知 (`.scrapbox`)
 * Syntax highlight
 
 ## 必要要件
